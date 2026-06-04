@@ -195,6 +195,7 @@ function GalleryCard({
     gradient: string;
     subtitle: string;
     colors: string[];
+    tags: string[];
   };
 }) {
   return (

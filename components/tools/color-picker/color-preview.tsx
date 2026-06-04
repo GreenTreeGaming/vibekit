@@ -1,8 +1,9 @@
 import Color from "color";
+import { RefObject } from "react";
 
 interface Props {
   color: string;
-  previewRef: React.RefObject<HTMLDivElement>;
+  previewRef: RefObject<HTMLDivElement | null>;
 }
 
 export function ColorPreview({
