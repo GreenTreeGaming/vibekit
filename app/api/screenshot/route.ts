@@ -113,12 +113,15 @@ export async function POST(
         animations: "disabled",
       });
 
-    return new NextResponse(screenshot, {
-      headers: {
-        "Content-Type": "image/png",
-        "Cache-Control": "no-store",
-      },
-    });
+    return new NextResponse(
+      new Uint8Array(screenshot),
+      {
+        headers: {
+          "Content-Type": "image/png",
+          "Cache-Control": "no-store",
+        },
+      }
+    );
   } catch (error) {
     console.error(error);
 
