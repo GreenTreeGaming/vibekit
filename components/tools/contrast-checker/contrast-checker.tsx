@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 
 import { ContrastControls } from "./contrast-controls";
 import { ContrastPreview } from "./contrast-preview";
+import Color from "color";
 
 import {
   getContrast,
@@ -34,6 +35,69 @@ export function ContrastChecker() {
     setForeground(background);
     setBackground(foreground);
   };
+
+  const recommendation =
+    useMemo(() => {
+      if (contrast.aa) {
+        return null;
+      }
+
+      try {
+        const bg =
+          Color(background);
+
+        const bgLum =
+          bg.luminosity();
+
+        const candidates = [
+          Color("#000000"),
+          Color("#FFFFFF"),
+        ];
+
+        for (
+          const candidate of candidates
+        ) {
+          const result =
+            getContrast(
+              candidate.hex(),
+              background
+            );
+
+          if (result.aa) {
+            return {
+              color:
+                candidate.hex(),
+              ratio:
+                result.ratio,
+            };
+          }
+        }
+
+        let candidate =
+          bgLum > 0.5
+            ? Color("#000000")
+            : Color("#FFFFFF");
+
+        const result =
+          getContrast(
+            candidate.hex(),
+            background
+          );
+
+        return {
+          color:
+            candidate.hex(),
+          ratio:
+            result.ratio,
+        };
+      } catch {
+        return null;
+      }
+    }, [
+      foreground,
+      background,
+      contrast.aa,
+    ]);
 
   return (
     <section className="py-32">
@@ -111,78 +175,172 @@ export function ContrastChecker() {
           />
         </div>
 
-        {/* Results */}
+        {/* Accessibility Report */}
 
         <section className="mt-16">
           <h2 className="mb-8 text-4xl font-bold">
-            Results
+            Accessibility Report
           </h2>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            <div
-              className="
-                rounded-[32px]
-                border
-                border-white/10
-                bg-white/5
-                p-8
-              "
-            >
-              <p className="text-zinc-500">
-                Contrast Ratio
-              </p>
+          <div
+            className="
+      rounded-[32px]
+      border
+      border-white/10
+      bg-white/5
+      p-8
+    "
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-zinc-500">
+                  Contrast Score
+                </p>
 
-              <h3 className="mt-3 text-6xl font-black">
-                {
-                  contrast.ratio
-                }
-                :1
-              </h3>
-            </div>
+                <h3 className="mt-2 text-7xl font-black">
+                  {contrast.ratio}:1
+                </h3>
+              </div>
 
-            <div
-              className="
-                rounded-[32px]
-                border
-                border-white/10
-                bg-white/5
-                p-8
-              "
-            >
-              <p className="text-zinc-500">
-                WCAG Compliance
-              </p>
+              <div
+                className={`
+          rounded-full
+          px-5
+          py-3
+          text-sm
+          font-semibold
 
-              <div className="mt-4 space-y-2">
-                <div>
-                  AA Normal:{" "}
-                  {contrast.aa
-                    ? "✅"
-                    : "❌"}
-                </div>
-
-                <div>
-                  AAA Normal:{" "}
-                  {contrast.aaa
-                    ? "✅"
-                    : "❌"}
-                </div>
-
-                <div>
-                  AA Large:{" "}
-                  {contrast.aaLarge
-                    ? "✅"
-                    : "❌"}
-                </div>
-
-                <div>
-                  AAA Large:{" "}
-                  {contrast.aaaLarge
-                    ? "✅"
-                    : "❌"}
-                </div>
+          ${contrast.aaa
+                    ? "bg-emerald-500/20 text-emerald-400"
+                    : contrast.aa
+                      ? "bg-yellow-500/20 text-yellow-400"
+                      : "bg-red-500/20 text-red-400"
+                  }
+        `}
+              >
+                {contrast.aaa
+                  ? "AAA Accessible"
+                  : contrast.aa
+                    ? "AA Accessible"
+                    : "Fails WCAG"}
               </div>
             </div>
+
+            <div className="mt-8 grid gap-4 md:grid-cols-2">
+              <ReportItem
+                label="Body Text"
+                pass={contrast.aa}
+              />
+
+              <ReportItem
+                label="Headings"
+                pass={contrast.aaLarge}
+              />
+
+              <ReportItem
+                label="Buttons"
+                pass={contrast.aa}
+              />
+
+              <ReportItem
+                label="Forms"
+                pass={contrast.aa}
+              />
+
+              <ReportItem
+                label="Navigation"
+                pass={contrast.aa}
+              />
+
+              <ReportItem
+                label="Tiny Text"
+                pass={contrast.aaa}
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-16">
+          <h2 className="mb-8 text-4xl font-bold">
+            Recommended Fix
+          </h2>
+
+          <div
+            className="
+      rounded-[32px]
+      border
+      border-white/10
+      bg-white/5
+      p-8
+    "
+          >
+            {recommendation ? (
+              <>
+                <p className="text-zinc-400">
+                  Current foreground color
+                  does not pass AA.
+                </p>
+
+                <div className="mt-6 flex items-center gap-6">
+                  <div>
+                    <p className="mb-2 text-sm text-zinc-500">
+                      Suggested Color
+                    </p>
+
+                    <div
+                      className="h-20 w-20 rounded-2xl border border-white/10"
+                      style={{
+                        background:
+                          recommendation.color,
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <p className="font-mono text-2xl font-bold">
+                      {recommendation.color}
+                    </p>
+
+                    <p className="mt-2 text-zinc-400">
+                      New contrast ratio:
+                      {" "}
+                      {recommendation.ratio}
+                      :1
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() =>
+                    setForeground(
+                      recommendation.color
+                    )
+                  }
+                  className="
+            mt-6
+            rounded-2xl
+            bg-white
+            px-5
+            py-3
+            font-medium
+            text-black
+          "
+                >
+                  Apply Fix
+                </button>
+              </>
+            ) : (
+              <div>
+                <p className="text-emerald-400 font-semibold">
+                  No changes needed.
+                </p>
+
+                <p className="mt-2 text-zinc-500">
+                  This color combination
+                  already passes WCAG AA.
+                </p>
+              </div>
+            )}
           </div>
         </section>
 
@@ -396,5 +554,41 @@ export function ContrastChecker() {
         </section>
       </div>
     </section>
+  );
+}
+
+function ReportItem({
+  label,
+  pass,
+}: {
+  label: string;
+  pass: boolean;
+}) {
+  return (
+    <div
+      className="
+        flex
+        items-center
+        justify-between
+        rounded-2xl
+        border
+        border-white/10
+        bg-black/20
+        px-5
+        py-4
+      "
+    >
+      <span>{label}</span>
+
+      <span
+        className={
+          pass
+            ? "text-emerald-400"
+            : "text-red-400"
+        }
+      >
+        {pass ? "PASS" : "FAIL"}
+      </span>
+    </div>
   );
 }

@@ -68,24 +68,25 @@ export function ColorHistory({
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {colors.map((color) => (
-              <button
-                key={color}
-                onClick={() =>
-                  onSelect(color)
-                }
-                className="
-                  group
-                  overflow-hidden
-                  rounded-3xl
-                  border
-                  border-white/10
-                  bg-black/20
-                  text-left
-                  transition-all
-                  hover:scale-[1.02]
-                  hover:border-white/20
-                "
-              >
+  <div
+    key={color}
+    onClick={() =>
+      onSelect(color)
+    }
+    className="
+      group
+      cursor-pointer
+      overflow-hidden
+      rounded-3xl
+      border
+      border-white/10
+      bg-black/20
+      text-left
+      transition-all
+      hover:scale-[1.02]
+      hover:border-white/20
+    "
+  >
                 <div
                   className="h-24 w-full"
                   style={{
@@ -137,7 +138,7 @@ export function ColorHistory({
                     </button>
                   </div>
                 </div>
-              </button>
+              </div>
             ))}
           </div>
         )}

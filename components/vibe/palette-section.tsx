@@ -171,28 +171,6 @@ export function PaletteSection({
             </p>
           </div>
         </div>
-
-        {/* Design Characteristics */}
-
-        <div className="mt-12 grid gap-6 lg:grid-cols-3">
-          <InfoCard
-            title="Energy"
-            value="High"
-            description="Strong saturation and contrast."
-          />
-
-          <InfoCard
-            title="Temperature"
-            value="Mixed"
-            description="Warm primary balanced by cool secondary."
-          />
-
-          <InfoCard
-            title="Best For"
-            value="Marketing"
-            description="Landing pages, SaaS, creative brands."
-          />
-        </div>
       </div>
     </section>
   );

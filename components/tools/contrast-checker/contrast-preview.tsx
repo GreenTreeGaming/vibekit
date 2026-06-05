@@ -17,15 +17,34 @@ export function ContrastPreview({
         p-8
       "
     >
-      <h3 className="mb-6 text-2xl font-bold">
-        Live Preview
-      </h3>
+      <div className="mb-6 flex items-center justify-between">
+        <h3 className="text-2xl font-bold">
+          Live Preview
+        </h3>
+
+        <div
+          className="
+      rounded-full
+      border
+      border-white/10
+      px-4
+      py-2
+      text-sm
+      text-zinc-400
+    "
+        >
+          {foreground}
+          {" → "}
+          {background}
+        </div>
+      </div>
 
       <div
-        className="
-          flex
-          h-[450px]
-          flex-col
+  className="
+    relative
+    flex
+    h-[450px]
+    flex-col
           items-center
           justify-center
           rounded-[28px]
@@ -45,6 +64,25 @@ export function ContrastPreview({
           Generate complete design
           systems from screenshots.
         </p>
+
+        <div className="mt-8 flex gap-3">
+  <span
+    className="rounded-full px-3 py-1 text-sm"
+    style={{
+      backgroundColor:
+        foreground,
+      color: background,
+    }}
+  >
+    Badge
+  </span>
+
+  <span
+    className="rounded-full border border-current px-3 py-1 text-sm"
+  >
+    Secondary
+  </span>
+</div>
 
         <button
           className="mt-8 rounded-2xl px-6 py-3"
