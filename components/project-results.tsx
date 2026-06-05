@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { AIAnalysis } from "@/types/ai";
 
 import {
   Prism as SyntaxHighlighter,
@@ -13,6 +14,7 @@ import {
 interface ProjectResultsProps {
   imageUrl: string;
   palette: string[];
+  analysis: AIAnalysis | null;
   onReset: () => void;
 }
 
@@ -526,7 +528,7 @@ function GeneratedEcommerce({
   );
 }
 
-function AnalysisCard({
+function AnalysisRow({
   label,
   value,
 }: {
@@ -534,14 +536,14 @@ function AnalysisCard({
   value: string;
 }) {
   return (
-    <div className="rounded-[24px] border border-white/10 bg-white/5 p-6">
-      <p className="text-sm text-zinc-500">
+    <div className="flex items-center justify-between">
+      <span className="text-zinc-500">
         {label}
-      </p>
+      </span>
 
-      <h3 className="mt-3 text-xl font-bold">
+      <span className="font-medium text-zinc-200">
         {value}
-      </h3>
+      </span>
     </div>
   );
 }
@@ -650,6 +652,7 @@ function getExportCode(
 export function ProjectResults({
   imageUrl,
   palette,
+  analysis,
   onReset,
 }: ProjectResultsProps) {
   const [preview, setPreview] = useState<
@@ -765,6 +768,224 @@ export function ProjectResults({
           </div>
         )}
       </section>
+
+      {analysis && (
+        <section className="relative mb-32">
+          {/* Glow */}
+
+          <div
+            className="
+        absolute
+        left-1/2
+        top-0
+        h-[500px]
+        w-[500px]
+        -translate-x-1/2
+        rounded-full
+        bg-violet-500/10
+        blur-[140px]
+      "
+          />
+
+          <div className="relative">
+            <div className="mb-12 text-center">
+              <p className="mb-4 text-sm font-medium uppercase tracking-[0.3em] text-violet-400">
+                AI Powered Analysis
+              </p>
+
+              <h2 className="text-6xl font-black">
+                Design DNA
+              </h2>
+            </div>
+
+            {/* Main Insight */}
+
+            <div
+              className="
+          rounded-[40px]
+          border
+          border-white/10
+          bg-black/20
+          p-10
+          backdrop-blur-xl
+        "
+            >
+              <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
+                Summary
+              </p>
+
+              <p
+                className="
+            mt-6
+            max-w-4xl
+            text-2xl
+            leading-relaxed
+            text-zinc-200
+          "
+              >
+                {analysis.description}
+              </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                {[
+                  analysis.style,
+                  analysis.industry,
+                  analysis.mood,
+                  analysis.spacingStyle,
+                ].map((item) => (
+                  <span
+                    key={item}
+                    className="
+                rounded-full
+                border
+                border-white/10
+                bg-white/[0.03]
+                px-4
+                py-2
+                text-sm
+                text-zinc-300
+              "
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Lower Grid */}
+
+            <div className="mt-8 grid gap-6 lg:grid-cols-2">
+              {/* Fonts */}
+
+              <div
+                className="
+            rounded-[32px]
+            border
+            border-white/10
+            bg-black/20
+            p-8
+          "
+              >
+                <h3 className="text-xl font-bold">
+                  Recommended Fonts
+                </h3>
+
+                <p className="mt-2 text-zinc-500">
+                  Typography that matches the visual language
+                  of this design.
+                </p>
+
+                <div className="mt-6 space-y-4">
+                  {analysis.recommendedFonts.map(
+                    (font) => (
+                      <a
+                        key={font}
+                        href={`https://fonts.google.com/specimen/${encodeURIComponent(
+                          font
+                        ).replace(/%20/g, "+")}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="
+                    block
+                    rounded-3xl
+                    border
+                    border-white/10
+                    bg-white/[0.03]
+                    p-5
+                    transition-all
+                    hover:border-violet-500/40
+                    hover:bg-violet-500/5
+                  "
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-lg font-bold">
+                            {font}
+                          </span>
+
+                          <span className="text-zinc-500">
+                            ↗
+                          </span>
+                        </div>
+                      </a>
+                    )
+                  )}
+                </div>
+              </div>
+
+              {/* Design DNA */}
+
+              <div
+                className="
+            rounded-[32px]
+            border
+            border-white/10
+            bg-black/20
+            p-8
+          "
+              >
+                <h3 className="text-xl font-bold">
+                  Design Patterns
+                </h3>
+
+                <p className="mt-2 text-zinc-500">
+                  Recurring visual themes identified in
+                  the screenshot.
+                </p>
+
+                <div className="mt-6 flex flex-wrap gap-3">
+                  {analysis.uiPatterns.map(
+                    (pattern) => (
+                      <div
+                        key={pattern}
+                        className="
+                    rounded-full
+                    border
+                    border-white/10
+                    bg-white/[0.03]
+                    px-4
+                    py-2
+                    text-sm
+                    text-zinc-300
+                  "
+                      >
+                        ✦ {pattern}
+                      </div>
+                    )
+                  )}
+                </div>
+
+                <div className="mt-8 border-t border-white/10 pt-8">
+                  <p className="mb-4 text-sm uppercase tracking-[0.25em] text-zinc-500">
+                    Analysis
+                  </p>
+
+                  <div className="space-y-4">
+                    <AnalysisRow
+                      label="Design Style"
+                      value={analysis.style}
+                    />
+
+                    <AnalysisRow
+                      label="Industry Match"
+                      value={analysis.industry}
+                    />
+
+                    <AnalysisRow
+                      label="Visual Mood"
+                      value={analysis.mood}
+                    />
+
+                    <AnalysisRow
+                      label="Layout Philosophy"
+                      value={analysis.spacingStyle}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* generated ui */}
 

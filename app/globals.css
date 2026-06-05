@@ -40,3 +40,13 @@ pre,
 [data-animate="swatch"] {
   will-change: transform;
 }
+
+@keyframes shimmer {
+  from {
+    transform: translateX(-150%);
+  }
+
+  to {
+    transform: translateX(150%);
+  }
+}

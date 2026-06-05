@@ -1,29 +1,67 @@
-import { HfInference } from "@huggingface/inference";
 import { NextResponse } from "next/server";
-
-const hf = new HfInference(process.env.HF_TOKEN);
+import { gemini } from "@/lib/gemini";
+import { ratelimit } from "@/lib/rate-limit";
 
 export async function POST(req: Request) {
+  console.log("🔥 ANALYZE ROUTE HIT");
+
   try {
-    const { imageUrl } = await req.json();
 
-    const result = await hf.chatCompletion({
-      model: "meta-llama/Llama-3.2-11B-Vision-Instruct",
+    const ip =
+      req.headers.get(
+        "x-forwarded-for"
+      ) ?? "anonymous";
 
-      messages: [
+    const result =
+      await ratelimit.limit(ip);
+
+    if (!result.success) {
+      return NextResponse.json(
         {
-          role: "user",
-          content: [
-            {
-              type: "image_url",
-              image_url: {
-                url: imageUrl,
-              },
-            },
+          error:
+            "AI analysis limit reached. Please try again later.",
+          remaining: 0,
+        },
+        {
+          status: 429,
+        }
+      );
+    }
 
-            {
-              type: "text",
-              text: `
+    const { image } =
+      await req.json();
+
+    if (!image) {
+      return NextResponse.json(
+        {
+          error:
+            "No image provided.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const base64 = image.replace(
+      /^data:image\/\w+;base64,/,
+      ""
+    );
+
+    const response =
+      await gemini.models.generateContent({
+        model: "gemini-2.5-flash",
+
+        contents: [
+          {
+            inlineData: {
+              mimeType: "image/png",
+              data: base64,
+            },
+          },
+
+          {
+            text: `
 Analyze this UI screenshot.
 
 Return ONLY valid JSON.
@@ -31,36 +69,71 @@ Return ONLY valid JSON.
 {
   "style": "",
   "industry": "",
-  "tone": "",
-  "complexity": "",
-  "headingFont": "",
-  "bodyFont": "",
-  "monoFont": "",
-  "keywords": []
+  "mood": "",
+  "description": "",
+  "recommendedFonts": [],
+  "uiPatterns": [],
+  "borderRadius": "",
+  "shadowStyle": "",
+  "spacingStyle": ""
 }
-`,
-            },
-          ],
+            `,
+          },
+        ],
+      });
+
+    console.log("🤖 GEMINI CALLED");
+
+    const raw =
+      response.text ?? "{}";
+
+    const cleaned = raw.replace(
+      /```json|```/g,
+      ""
+    ).trim();
+
+    let parsed;
+
+    try {
+      parsed =
+        JSON.parse(cleaned);
+    } catch {
+      console.error(
+        "Gemini returned invalid JSON:",
+        cleaned
+      );
+
+      return NextResponse.json(
+        {
+          error:
+            "Failed to parse AI response.",
         },
-      ],
-
-      max_tokens: 400,
-    });
-
-    const text =
-      result.choices?.[0]?.message?.content ?? "{}";
+        {
+          status: 500,
+        }
+      );
+    }
 
     return NextResponse.json({
-      result: JSON.parse(text),
+      ...parsed,
+
+      usage: {
+        remaining:
+          result.remaining,
+        limit:
+          result.limit,
+      },
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error(
-      JSON.stringify(error, null, 2)
+      "AI Analysis Error:",
+      error
     );
 
     return NextResponse.json(
       {
-        error: error?.message,
+        error:
+          "Failed to analyze screenshot.",
       },
       {
         status: 500,

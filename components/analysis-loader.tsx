@@ -79,6 +79,7 @@ export function AnalysisLoader({
           clearInterval(interval);
 
           setTimeout(() => {
+            console.log("🚀 ON COMPLETE FIRED");
             onComplete?.();
           }, 1200);
 

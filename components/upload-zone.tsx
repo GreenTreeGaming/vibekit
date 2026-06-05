@@ -14,16 +14,36 @@ interface UploadZoneProps {
     file: File,
     url: string
   ) => void;
+
+  aiLocked: boolean;
+
+  aiRemaining: number;
+
+  useAI: boolean;
+
+  onUseAIChange: (
+    value: boolean
+  ) => void;
 }
 
 export function UploadZone({
   onUpload,
+  useAI,
+  aiLocked,
+  aiRemaining,
+  onUseAIChange,
 }: UploadZoneProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [loading, setLoading] = useState(false);
+
+  const toggleRef =
+    useRef<HTMLDivElement>(null);
+
+  const indicatorRef =
+    useRef<HTMLDivElement>(null);
 
   const [loadingStep, setLoadingStep] =
     useState("Preparing browser...");
@@ -67,6 +87,16 @@ export function UploadZone({
     useState(false);
 
   const [url, setUrl] = useState("");
+
+  useEffect(() => {
+    if (!indicatorRef.current) return;
+
+    gsap.to(indicatorRef.current, {
+      x: useAI ? "100%" : "0%",
+      duration: 0.45,
+      ease: "power3.out",
+    });
+  }, [useAI]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -232,6 +262,210 @@ export function UploadZone({
             tokens, typography, dark mode, and
             production-ready exports.
           </p>
+
+          <div className="mt-12 flex justify-center">
+            <div
+              ref={toggleRef}
+              className="
+      relative
+      w-full
+      max-w-2xl
+      overflow-hidden
+      rounded-[32px]
+      border
+      border-white/10
+      bg-black/20
+      p-2
+      backdrop-blur-2xl
+    "
+            >
+              {/* Sliding Background */}
+
+              <div
+                ref={indicatorRef}
+                className={`
+    absolute
+    left-2
+    top-2
+    h-[calc(100%-16px)]
+    w-[calc(50%-8px)]
+    rounded-[24px]
+    overflow-hidden
+    shadow-[0_10px_50px_rgba(255,255,255,0.08)]
+
+    ${useAI
+                    ? `
+        bg-gradient-to-br
+        from-violet-500
+        via-fuchsia-500
+        to-indigo-600
+      `
+                    : `
+        bg-white
+      `
+                  }
+  `}
+              >
+                {useAI && !aiLocked && (
+                  <>
+                    <div
+                      className="
+          absolute
+          inset-0
+          bg-[linear-gradient(110deg,transparent_20%,rgba(255,255,255,0.18)_50%,transparent_80%)]
+          animate-[shimmer_3s_linear_infinite]
+        "
+                    />
+
+                    <div
+                      className="
+          absolute
+          inset-0
+          bg-gradient-to-t
+          from-black/10
+          to-white/5
+        "
+                    />
+                  </>
+                )}
+              </div>
+
+              <div className="relative z-10 grid grid-cols-2">
+                <button
+                  onClick={() =>
+                    onUseAIChange(false)
+                  }
+                  className="
+          px-8
+          py-6
+          text-center
+          transition-colors
+        "
+                >
+                  <div
+                    className={`text-lg font-bold transition-colors ${!useAI
+                      ? "text-black"
+                      : "text-zinc-400"
+                      }`}
+                  >
+                    Fast Mode
+                  </div>
+
+                  <div
+                    className={`mt-1 text-sm ${!useAI
+                      ? "text-zinc-600"
+                      : "text-zinc-500"
+                      }`}
+                  >
+                    Palette extraction only
+                  </div>
+                </button>
+
+                <button
+                  disabled={aiLocked}
+                  onClick={() =>
+                    !aiLocked &&
+                    onUseAIChange(true)
+                  }
+                  className={`
+    px-8
+    py-6
+    text-center
+    transition-colors
+
+    ${aiLocked
+                      ? "cursor-not-allowed opacity-40"
+                      : ""
+                    }
+  `}
+                >
+                  <div
+                    className={`text-lg font-bold transition-colors ${useAI
+                      ? "text-white"
+                      : "text-zinc-400"
+                      }`}
+                  >
+                    AI Mode
+                  </div>
+
+                  <div
+                    className={`mt-1 text-sm ${useAI
+                      ? "text-white/75"
+                      : "text-zinc-500"
+                      }`}
+                  >
+                    Design DNA, typography &
+                    style analysis
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {useAI && (
+            <div className="mt-5 flex justify-center">
+              <div
+                className="
+    inline-flex
+    items-center
+    gap-2
+    rounded-full
+    border
+    border-violet-500/20
+    bg-gradient-to-r
+    from-violet-500/10
+    via-fuchsia-500/10
+    to-indigo-500/10
+    px-5
+    py-2.5
+    text-sm
+    font-medium
+    text-white
+    backdrop-blur-xl
+    shadow-[0_0_40px_rgba(139,92,246,0.15)]
+  "
+              >
+                <Sparkles className="h-4 w-4 text-violet-300" />
+
+                AI Design Analysis Included
+
+                <span className="text-white/30">
+                  •
+                </span>
+
+                <span className="text-violet-200">
+
+                  {aiRemaining} remaining today
+
+                </span>
+
+                <span className="text-violet-200">
+                  +2–5s
+                </span>
+              </div>
+            </div>
+          )}
+
+          {aiLocked && (
+            <div className="mt-5 flex justify-center">
+              <div
+                className="
+        rounded-full
+        border
+        border-red-500/20
+        bg-red-500/10
+        px-5
+        py-2.5
+        text-sm
+        font-medium
+        text-red-300
+      "
+              >
+                AI limit reached today.
+                Fast Mode is still available.
+              </div>
+            </div>
+          )}
         </div>
 
         <input
