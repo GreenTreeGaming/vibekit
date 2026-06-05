@@ -21,6 +21,11 @@ export function ColorPicker() {
   const previewRef =
     useRef<HTMLDivElement>(null);
 
+  const historyTimeout =
+    useRef<NodeJS.Timeout | null>(
+      null
+    );
+
   const [color, setColor] =
     useState("#8B5CF6");
 
@@ -86,14 +91,25 @@ export function ColorPicker() {
   ) => {
     setColor(value);
 
-    setHistory((prev) =>
-      [
-        value,
-        ...prev.filter(
-          (c) => c !== value
-        ),
-      ].slice(0, 8)
-    );
+    if (historyTimeout.current) {
+      clearTimeout(
+        historyTimeout.current
+      );
+    }
+
+    historyTimeout.current =
+      setTimeout(() => {
+        setHistory((prev) =>
+          [
+            value,
+            ...prev.filter(
+              (c) =>
+                c.toLowerCase() !==
+                value.toLowerCase()
+            ),
+          ].slice(0, 8)
+        );
+      }, 400);
   };
 
   return (
@@ -155,9 +171,7 @@ export function ColorPicker() {
             color={color}
             rgb={formats.rgb}
             hsl={formats.hsl}
-            onChange={
-              updateColor
-            }
+            onChange={updateColor}
           />
 
           <ColorPreview

@@ -69,7 +69,7 @@ export function Navbar() {
     },
     {
       label: "Github",
-      href: "https://github.com",
+      href: "https://github.com/GreenTreeGaming/vibekit",
     },
   ];
 

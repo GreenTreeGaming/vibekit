@@ -13,29 +13,62 @@ import {
 interface ProjectResultsProps {
   imageUrl: string;
   palette: string[];
+  onReset: () => void;
 }
 
 function GeneratedDashboard({
   palette,
+  theme,
 }: {
   palette: string[];
+  theme: "light" | "dark";
 }) {
-  const primary = palette[0] ?? "#8B5CF6";
+  const c1 = palette[0] ?? "#8B5CF6";
+  const c2 = palette[1] ?? "#EC4899";
+  const c3 = palette[2] ?? "#06B6D4";
+  const c4 = palette[3] ?? "#F59E0B";
+  const c5 = palette[4] ?? "#10B981";
+  const c6 = palette[5] ?? "#6366F1";
 
-  const secondary = palette[1] ?? "#EC4899";
+  const bg =
+    theme === "dark"
+      ? "#09090B"
+      : "#FFFFFF";
 
-  const accent = palette[2] ?? "#06B6D4";
+  const text =
+    theme === "dark"
+      ? "#FFFFFF"
+      : "#000000";
+
+  const surface =
+    theme === "dark"
+      ? "#18181B"
+      : "#F8FAFC";
 
   return (
-    <div className="overflow-hidden rounded-[32px] border border-white/10 bg-white">
+    <div
+      className="overflow-hidden rounded-[32px] border border-white/10"
+      style={{
+        backgroundColor: bg,
+        color: text,
+      }}
+    >
       <div className="flex">
         {/* Sidebar */}
 
         <aside
           className="w-64 p-6"
-          style={{ backgroundColor: primary }}
+          style={{ backgroundColor: c1 }}
         >
-          <div className="mb-10 text-xl font-bold text-black">
+          <div
+            className="mb-10 text-xl font-bold"
+            style={{
+              color:
+                theme === "dark"
+                  ? "#FFFFFF"
+                  : "#000000",
+            }}
+          >
             VibeKit
           </div>
 
@@ -54,7 +87,12 @@ function GeneratedDashboard({
         <main className="flex-1 p-8">
           <div className="mb-8 flex items-center justify-between">
             <div>
-              <h3 className="text-3xl font-bold text-black">
+              <h3
+                className="text-3xl font-bold"
+                style={{
+                  color: text,
+                }}
+              >
                 Dashboard
               </h3>
 
@@ -66,7 +104,7 @@ function GeneratedDashboard({
             <button
               className="rounded-xl px-4 py-2 font-medium"
               style={{
-                backgroundColor: secondary,
+                backgroundColor: c2,
                 color: "white",
               }}
             >
@@ -82,14 +120,23 @@ function GeneratedDashboard({
                 key={i}
                 className="rounded-2xl p-5"
                 style={{
-                  backgroundColor: `${accent}20`,
+                  backgroundColor: [
+                    `${c3}20`,
+                    `${c4}20`,
+                    `${c5}20`,
+                  ][i - 1],
                 }}
               >
                 <p className="text-sm text-zinc-500">
                   Revenue
                 </p>
 
-                <h4 className="mt-2 text-3xl font-bold text-black">
+                <h4
+                  className="mt-2 text-3xl font-bold"
+                  style={{
+                    color: text,
+                  }}
+                >
                   $24.5k
                 </h4>
               </div>
@@ -98,7 +145,16 @@ function GeneratedDashboard({
 
           {/* Chart */}
 
-          <div className="rounded-3xl border border-zinc-200 p-6">
+          <div
+            className="rounded-3xl p-6"
+            style={{
+              backgroundColor: surface,
+              border: `1px solid ${theme === "dark"
+                ? "#27272A"
+                : "#E4E4E7"
+                }`,
+            }}
+          >
             <div className="mb-4 h-4 w-32 rounded-full bg-zinc-200" />
 
             <div className="flex h-48 items-end gap-4">
@@ -109,10 +165,14 @@ function GeneratedDashboard({
                     className="flex-1 rounded-t-xl"
                     style={{
                       height,
-                      backgroundColor:
-                        i % 2 === 0
-                          ? primary
-                          : secondary,
+                      backgroundColor: [
+                        c1,
+                        c2,
+                        c3,
+                        c4,
+                        c5,
+                        c6,
+                      ][i],
                     }}
                   />
                 )
@@ -127,34 +187,94 @@ function GeneratedDashboard({
 
 function GeneratedLandingPage({
   palette,
+  theme,
 }: {
   palette: string[];
+  theme: "light" | "dark";
 }) {
-  const primary = palette[0] ?? "#8B5CF6";
-  const secondary = palette[1] ?? "#EC4899";
-  const accent = palette[2] ?? "#06B6D4";
+  const c1 = palette[0] ?? "#8B5CF6";
+  const c2 = palette[1] ?? "#EC4899";
+  const c3 = palette[2] ?? "#06B6D4";
+  const c4 = palette[3] ?? "#F59E0B";
+  const c5 = palette[4] ?? "#10B981";
+  const c6 = palette[5] ?? "#6366F1";
+
+  const bg =
+    theme === "dark"
+      ? "#09090B"
+      : "#FFFFFF";
+
+  const text =
+    theme === "dark"
+      ? "#FFFFFF"
+      : "#000000";
+
+  const surface =
+    theme === "dark"
+      ? "#18181B"
+      : "#F8FAFC";
+
+  const placeholder =
+    theme === "dark"
+      ? "rgba(255,255,255,0.08)"
+      : "rgba(0,0,0,0.08)";
+
+  const muted =
+    theme === "dark"
+      ? "#A1A1AA"
+      : "#71717A";
 
   return (
-    <div className="overflow-hidden rounded-[32px] bg-white p-10">
+    <div
+      className="
+        overflow-hidden
+        rounded-[32px]
+        p-10
+        transition-all
+        duration-300
+      "
+      style={{
+        backgroundColor: bg,
+        color: text,
+      }}
+    >
       <div className="mb-16 flex items-center justify-between">
-        <div className="h-6 w-32 rounded-full bg-zinc-200" />
+        <div
+          className="h-6 w-32 rounded-full"
+          style={{
+            backgroundColor: placeholder,
+          }}
+        />
 
         <div className="flex gap-4">
-          <div className="h-4 w-16 rounded-full bg-zinc-200" />
-          <div className="h-4 w-16 rounded-full bg-zinc-200" />
-          <div className="h-4 w-16 rounded-full bg-zinc-200" />
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="h-4 w-16 rounded-full"
+              style={{
+                backgroundColor: placeholder,
+              }}
+            />
+          ))}
         </div>
       </div>
 
       <div className="max-w-3xl">
         <h1
           className="text-6xl font-black"
-          style={{ color: primary }}
+          style={{
+            color: c1,
+          }}
         >
           Build faster with beautiful design.
         </h1>
 
-        <p className="mt-6 text-xl text-zinc-500">
+        <p
+          className="mt-6 text-xl"
+          style={{
+            color: muted,
+          }}
+        >
           Generate complete design systems from any
           screenshot.
         </p>
@@ -163,34 +283,71 @@ function GeneratedLandingPage({
           <button
             className="rounded-2xl px-6 py-3 text-white"
             style={{
-              backgroundColor: secondary,
+              backgroundColor: c2,
             }}
           >
             Get Started
           </button>
 
-          <button className="rounded-2xl border border-zinc-200 px-6 py-3 text-black">
+          <button
+            className="rounded-2xl px-6 py-3"
+            style={{
+              color: text,
+              border: `1px solid ${theme === "dark"
+                ? "#27272A"
+                : "#E4E4E7"
+                }`,
+            }}
+          >
             Learn More
           </button>
         </div>
       </div>
 
       <div className="mt-16 grid grid-cols-3 gap-6">
-        {[1, 2, 3].map((i) => (
+        {[
+          { color: c4, title: "Fast Setup" },
+          { color: c5, title: "Design Tokens" },
+          { color: c6, title: "Exports" },
+        ].map((item) => (
           <div
-            key={i}
+            key={item.title}
             className="rounded-3xl p-6"
             style={{
-              backgroundColor: `${accent}20`,
+              backgroundColor: surface,
+              border: `1px solid ${theme === "dark"
+                ? "#27272A"
+                : "#E4E4E7"
+                }`,
             }}
           >
-            <div className="mb-4 h-10 w-10 rounded-xl bg-black/10" />
+            <div
+              className="mb-4 h-10 w-10 rounded-xl"
+              style={{
+                backgroundColor: item.color,
+              }}
+            />
 
-            <div className="h-4 w-24 rounded-full bg-black/10" />
+            <div
+              className="h-4 w-24 rounded-full"
+              style={{
+                backgroundColor: placeholder,
+              }}
+            />
 
-            <div className="mt-3 h-4 w-full rounded-full bg-black/5" />
+            <div
+              className="mt-3 h-4 w-full rounded-full"
+              style={{
+                backgroundColor: placeholder,
+              }}
+            />
 
-            <div className="mt-2 h-4 w-3/4 rounded-full bg-black/5" />
+            <div
+              className="mt-2 h-4 w-3/4 rounded-full"
+              style={{
+                backgroundColor: placeholder,
+              }}
+            />
           </div>
         ))}
       </div>
@@ -200,22 +357,56 @@ function GeneratedLandingPage({
 
 function GeneratedMobileApp({
   palette,
-}: {
-  palette: string[];
-}) {
-  const primary = palette[0] ?? "#8B5CF6";
 
-  const secondary = palette[1] ?? "#EC4899";
+  theme,
+
+}: {
+
+  palette: string[];
+
+  theme: "light" | "dark";
+
+}) {
+  const c1 = palette[0] ?? "#8B5CF6";
+  const c2 = palette[1] ?? "#EC4899";
+  const c3 = palette[2] ?? "#06B6D4";
+  const c4 = palette[3] ?? "#F59E0B";
+  const c5 = palette[4] ?? "#10B981";
+  const c6 = palette[5] ?? "#6366F1";
+
+  const bg =
+    theme === "dark"
+      ? "#09090B"
+      : "#FFFFFF";
+
+  const surface =
+    theme === "dark"
+      ? "#18181B"
+      : "#FFFFFF";
 
   return (
-    <div className="flex justify-center rounded-[32px] bg-white p-10">
-      <div className="w-[320px] rounded-[40px] border-8 border-black bg-white p-6">
+    <div
+      className="flex justify-center rounded-[32px] p-10"
+      style={{
+        backgroundColor: bg,
+      }}
+    >
+      <div
+        className="w-[320px] rounded-[40px] p-6"
+        style={{
+          backgroundColor: surface,
+          border: `8px solid ${theme === "dark"
+            ? "#27272A"
+            : "#000000"
+            }`,
+        }}
+      >
         <div className="mb-6 h-6 w-24 rounded-full bg-zinc-200" />
 
         <div
           className="h-40 rounded-3xl"
           style={{
-            backgroundColor: primary,
+            backgroundColor: c1,
           }}
         />
 
@@ -225,7 +416,11 @@ function GeneratedMobileApp({
               key={i}
               className="rounded-2xl p-4"
               style={{
-                backgroundColor: `${secondary}20`,
+                backgroundColor: [
+                  `${c2}20`,
+                  `${c3}20`,
+                  `${c4}20`,
+                ][i - 1],
               }}
             >
               <div className="h-4 w-24 rounded-full bg-black/10" />
@@ -236,7 +431,7 @@ function GeneratedMobileApp({
         <button
           className="mt-6 w-full rounded-2xl py-3 text-white"
           style={{
-            backgroundColor: secondary,
+            backgroundColor: c5,
           }}
         >
           Continue
@@ -248,25 +443,61 @@ function GeneratedMobileApp({
 
 function GeneratedEcommerce({
   palette,
-}: {
-  palette: string[];
-}) {
-  const primary = palette[0] ?? "#8B5CF6";
 
-  const secondary = palette[1] ?? "#EC4899";
+  theme,
+
+}: {
+
+  palette: string[];
+
+  theme: "light" | "dark";
+
+}) {
+  const c1 = palette[0] ?? "#8B5CF6";
+  const c2 = palette[1] ?? "#EC4899";
+  const c3 = palette[2] ?? "#06B6D4";
+  const c4 = palette[3] ?? "#F59E0B";
+  const c5 = palette[4] ?? "#10B981";
+  const c6 = palette[5] ?? "#6366F1";
+
+  const bg =
+    theme === "dark"
+      ? "#09090B"
+      : "#FFFFFF";
+
+  const surface =
+    theme === "dark"
+      ? "#18181B"
+      : "#FFFFFF";
 
   return (
-    <div className="rounded-[32px] bg-white p-10">
+    <div
+      className="rounded-[32px] p-10"
+      style={{
+        backgroundColor: bg,
+      }}
+    >
       <div className="grid grid-cols-3 gap-6">
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="overflow-hidden rounded-3xl border border-zinc-200"
+            style={{
+              backgroundColor: surface,
+              border: `1px solid ${theme === "dark"
+                ? "#27272A"
+                : "#E4E4E7"
+                }`,
+            }}
+            className="overflow-hidden rounded-3xl"
           >
             <div
               className="h-56"
               style={{
-                backgroundColor: primary,
+                backgroundColor: [
+                  c1,
+                  c2,
+                  c3,
+                ][i - 1],
               }}
             />
 
@@ -278,7 +509,11 @@ function GeneratedEcommerce({
               <button
                 className="mt-6 w-full rounded-xl py-3 text-white"
                 style={{
-                  backgroundColor: secondary,
+                  backgroundColor: [
+                    c4,
+                    c5,
+                    c6,
+                  ][i - 1],
                 }}
               >
                 Add to Cart
@@ -315,9 +550,12 @@ function getExportCode(
   type: string,
   palette: string[]
 ) {
-  const primary = palette[0] ?? "#8B5CF6";
-  const secondary = palette[1] ?? "#EC4899";
-  const accent = palette[2] ?? "#06B6D4";
+  const c1 = palette[0] ?? "#8B5CF6";
+  const c2 = palette[1] ?? "#EC4899";
+  const c3 = palette[2] ?? "#06B6D4";
+  const c4 = palette[3] ?? "#F59E0B";
+  const c5 = palette[4] ?? "#10B981";
+  const c6 = palette[5] ?? "#6366F1";
 
   switch (type) {
     case "tailwind":
@@ -325,19 +563,25 @@ function getExportCode(
   theme: {
     extend: {
       colors: {
-        primary: "${primary}",
-        secondary: "${secondary}",
-        accent: "${accent}",
-      },
+  primary: "${c1}",
+  secondary: "${c2}",
+  accent: "${c3}",
+  success: "${c4}",
+  warning: "${c5}",
+  info: "${c6}",
+},
     },
   },
 };`;
 
     case "css":
       return `:root {
-  --primary: ${primary};
-  --secondary: ${secondary};
-  --accent: ${accent};
+  --color-1: ${c1};
+  --color-2: ${c2};
+  --color-3: ${c3};
+  --color-4: ${c4};
+  --color-5: ${c5};
+  --color-6: ${c6};
 
   --font-heading: "Space Grotesk";
   --font-body: "Inter";
@@ -347,17 +591,17 @@ function getExportCode(
       return JSON.stringify(
         {
           colors: {
-            primary,
-            secondary,
-            accent,
+            color1: c1,
+            color2: c2,
+            color3: c3,
+            color4: c4,
+            color5: c5,
+            color6: c6,
           },
 
           typography: {
-
             heading: "Space Grotesk",
-
             body: "Inter",
-
           },
         },
         null,
@@ -368,18 +612,28 @@ function getExportCode(
       return JSON.stringify(
         {
           global: {
-            primary: {
-              value: primary,
+            color1: {
+              value: c1,
               type: "color",
             },
-
-            secondary: {
-              value: secondary,
+            color2: {
+              value: c2,
               type: "color",
             },
-
-            accent: {
-              value: accent,
+            color3: {
+              value: c3,
+              type: "color",
+            },
+            color4: {
+              value: c4,
+              type: "color",
+            },
+            color5: {
+              value: c5,
+              type: "color",
+            },
+            color6: {
+              value: c6,
               type: "color",
             },
           },
@@ -396,6 +650,7 @@ function getExportCode(
 export function ProjectResults({
   imageUrl,
   palette,
+  onReset,
 }: ProjectResultsProps) {
   const [preview, setPreview] = useState<
     "dashboard" | "landing" | "mobile" | "ecommerce"
@@ -409,6 +664,11 @@ export function ProjectResults({
     exportType,
     palette,
   );
+
+  const [theme, setTheme] =
+    useState<"light" | "dark">(
+      "light"
+    );
 
   const exportLanguage = {
     tailwind: "typescript",
@@ -430,6 +690,32 @@ export function ProjectResults({
         <p className="mt-6 text-zinc-400">
           Generated from a single screenshot.
         </p>
+
+        <button
+          onClick={onReset}
+          className="
+      mt-8
+      inline-flex
+      items-center
+      gap-3
+      rounded-2xl
+      bg-gradient-to-r
+      from-violet-600
+      via-fuchsia-500
+      to-cyan-500
+      px-8
+      py-4
+      text-lg
+      font-bold
+      text-white
+      transition-all
+      duration-300
+      hover:scale-105
+      hover:shadow-[0_0_50px_rgba(139,92,246,0.35)]
+    "
+        >
+          Create Another Vibe
+        </button>
       </section>
 
       {/* screenshot */}
@@ -454,67 +740,129 @@ export function ProjectResults({
           Extracted Palette
         </h2>
 
-        <div className="grid grid-cols-6 gap-4">
-          {palette.map((color) => (
-            <div key={color}>
-              <div
-                className="h-32 rounded-3xl"
-                style={{
-                  backgroundColor: color,
-                }}
-              />
+        {palette.length > 0 ? (
+          <div className="grid grid-cols-6 gap-4">
+            {palette.map((color) => (
+              <div key={color}>
+                <div
+                  className="h-32 rounded-3xl"
+                  style={{
+                    backgroundColor: color,
+                  }}
+                />
 
-              <p className="mt-3 font-mono text-sm">
-                {color}
-              </p>
-            </div>
-          ))}
-        </div>
+                <p className="mt-3 font-mono text-sm">
+                  {color}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
+            <p className="text-lg text-zinc-400">
+              None found
+            </p>
+          </div>
+        )}
       </section>
 
       {/* generated ui */}
 
       <section className="mb-32">
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="text-4xl font-bold">
-            Generated Preview
-          </h2>
+          <div>
+            <h2 className="text-4xl font-bold">
+              Generated Preview
+            </h2>
+          </div>
 
-          <div className="flex gap-2 rounded-2xl border border-white/10 bg-white/5 p-2">
-            {[
-              ["dashboard", "Dashboard"],
-              ["landing", "Landing Page"],
-              ["mobile", "Mobile App"],
-              ["ecommerce", "Ecommerce"],
-            ].map(([key, label]) => (
+          <div className="flex items-center gap-4">
+
+            {/* Theme Toggle */}
+            <div className="flex gap-2 rounded-2xl border border-white/10 bg-white/5 p-2">
               <button
-                key={key}
-                onClick={() => setPreview(key as any)}
-                className={`rounded-xl px-4 py-2 text-sm transition ${preview === key
+                onClick={() => setTheme("light")}
+                className={`rounded-xl px-4 py-2 ${theme === "light"
                   ? "bg-white text-black"
-                  : "text-zinc-400 hover:text-white"
+                  : "text-zinc-400"
                   }`}
               >
-                {label}
+                Light
               </button>
-            ))}
+
+              <button
+                onClick={() => setTheme("dark")}
+                className={`rounded-xl px-4 py-2 ${theme === "dark"
+                  ? "bg-white text-black"
+                  : "text-zinc-400"
+                  }`}
+              >
+                Dark
+              </button>
+            </div>
+
+            {/* Preview Selector */}
+            <div className="flex gap-2 rounded-2xl border border-white/10 bg-white/5 p-2">
+              {[
+                ["dashboard", "Dashboard"],
+                ["landing", "Landing Page"],
+                ["mobile", "Mobile App"],
+                ["ecommerce", "Ecommerce"],
+              ].map(([key, label]) => (
+                <button
+                  key={key}
+                  onClick={() => setPreview(key as any)}
+                  className={`rounded-xl px-4 py-2 ${preview === key
+                    ? "bg-white text-black"
+                    : "text-zinc-400"
+                    }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
           </div>
         </div>
 
         {preview === "dashboard" && (
-          <GeneratedDashboard palette={palette} />
+          <GeneratedDashboard
+
+            palette={palette}
+
+            theme={theme}
+
+          />
         )}
 
         {preview === "landing" && (
-          <GeneratedLandingPage palette={palette} />
+          <GeneratedLandingPage
+
+            palette={palette}
+
+            theme={theme}
+
+          />
         )}
 
         {preview === "mobile" && (
-          <GeneratedMobileApp palette={palette} />
+          <GeneratedMobileApp
+
+            palette={palette}
+
+            theme={theme}
+
+          />
         )}
 
         {preview === "ecommerce" && (
-          <GeneratedEcommerce palette={palette} />
+          <GeneratedEcommerce
+
+            palette={palette}
+
+            theme={theme}
+
+          />
         )}
       </section>
 
@@ -624,6 +972,8 @@ export function ProjectResults({
           >
             Download
           </button>
+
+
         </div>
       </section>
     </main>

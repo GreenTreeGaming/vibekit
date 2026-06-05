@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 interface Props {
   harmonies: {
     complementary: string[];
@@ -10,6 +14,9 @@ interface Props {
 export function ColorHarmony({
   harmonies,
 }: Props) {
+  const [copied, setCopied] =
+    useState<string | null>(null);
+
   const palettes = [
     {
       label: "Complementary",
@@ -32,6 +39,20 @@ export function ColorHarmony({
         harmonies.splitComplementary,
     },
   ];
+
+  const copyColor = (
+    color: string
+  ) => {
+    navigator.clipboard.writeText(
+      color
+    );
+
+    setCopied(color);
+
+    setTimeout(() => {
+      setCopied(null);
+    }, 2000);
+  };
 
   return (
     <section className="mt-16">
@@ -59,9 +80,16 @@ export function ColorHarmony({
               <div className="flex gap-3">
                 {palette.colors.map(
                   (color) => (
-                    <div
+                    <button
                       key={color}
-                      className="flex-1"
+                      onClick={() =>
+                        copyColor(color)
+                      }
+                      className="
+                        flex-1
+                        transition-transform
+                        hover:scale-105
+                      "
                     >
                       <div
                         className="
@@ -69,6 +97,7 @@ export function ColorHarmony({
                           rounded-2xl
                           border
                           border-white/10
+                          transition-all
                         "
                         style={{
                           backgroundColor:
@@ -82,12 +111,13 @@ export function ColorHarmony({
                           text-center
                           font-mono
                           text-xs
-                          text-zinc-400
                         "
                       >
-                        {color}
+                        {copied === color
+                          ? "Copied!"
+                          : color}
                       </p>
-                    </div>
+                    </button>
                   )
                 )}
               </div>

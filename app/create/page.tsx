@@ -91,6 +91,17 @@ export default function CreatePage() {
           <ProjectResults
             imageUrl={imageUrl}
             palette={palette}
+            onReset={() => {
+              setImageFile(null);
+              setImageUrl(null);
+              setPalette([]);
+              setStage("upload");
+
+              window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+              });
+            }}
           />
         )}
     </main>
