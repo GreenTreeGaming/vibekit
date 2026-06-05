@@ -238,22 +238,6 @@ export function Footer() {
               md:justify-between
             "
           >
-            <div>
-              <h3
-                className="
-                  text-2xl
-                  font-bold
-                  text-white
-                "
-              >
-                Ready to steal a vibe?
-              </h3>
-
-              <p className="mt-2 text-zinc-400">
-                Upload a screenshot and generate a
-                complete design system in seconds.
-              </p>
-            </div>
 
             <div className="flex gap-3">
               <Link
