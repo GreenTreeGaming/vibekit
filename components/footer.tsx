@@ -215,69 +215,6 @@ export function Footer() {
           </div>
         </div>
 
-        {/* CTA Card */}
-
-        <div
-          className="
-            mt-20
-            rounded-[32px]
-            border
-            border-white/10
-            bg-white/[0.03]
-            p-8
-            backdrop-blur-2xl
-          "
-        >
-          <div
-            className="
-              flex
-              flex-col
-              gap-6
-              md:flex-row
-              md:items-center
-              md:justify-between
-            "
-          >
-
-            <div className="flex gap-3">
-              <Link
-                href="/create"
-                className="
-                  rounded-full
-                  bg-white
-                  px-6
-                  py-3
-                  font-medium
-                  text-black
-                  transition-transform
-                  hover:scale-105
-                "
-              >
-                Create Vibe
-              </Link>
-
-              <Link
-                href="https://github.com/GreenTreeGaming/vibekit"
-                target="_blank"
-                className="
-                  rounded-full
-                  border
-                  border-white/10
-                  bg-white/5
-                  px-6
-                  py-3
-                  font-medium
-                  text-white
-                  transition-colors
-                  hover:bg-white/10
-                "
-              >
-                GitHub
-              </Link>
-            </div>
-          </div>
-        </div>
-
         {/* Bottom */}
 
         <div
