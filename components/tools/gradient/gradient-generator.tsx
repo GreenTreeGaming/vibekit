@@ -267,57 +267,6 @@ bg-[${gradient}]
     "
           >
             <MeshPreview colors={colors} />
-            <div
-              className="
-    absolute
-    left-8
-    top-8
-    z-20
-    rounded-3xl
-    border
-    border-white/20
-    bg-black/20
-    px-5
-    py-4
-    backdrop-blur-xl
-  "
-            >
-              <p className="text-xs uppercase tracking-[0.3em] text-white/60">
-                Gradient
-              </p>
-
-              <h3 className="mt-2 text-3xl font-black text-white">
-                {type}
-              </h3>
-
-              <p className="mt-1 text-sm text-white/70">
-                {colors.length} Color Stops
-              </p>
-            </div>
-            <Link
-              href="/gallery"
-              className="
-    absolute
-    right-8
-    top-8
-    z-20
-    rounded-2xl
-    border
-    border-white/20
-    bg-black/20
-    px-4
-    py-2
-    text-sm
-    text-white
-    backdrop-blur-xl
-    transition-all
-    hover:bg-black/30
-  "
-            >
-              Browse Gallery →
-            </Link>
-
-
             <Watermark />
           </div>
         ) : (
