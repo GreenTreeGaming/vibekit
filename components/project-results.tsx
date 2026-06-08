@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { AIAnalysis } from "@/types/ai";
+import type { ExtractedColors } from "@/types/colors";
 
 import {
   Prism as SyntaxHighlighter,
@@ -13,46 +14,45 @@ import {
 
 interface ProjectResultsProps {
   imageUrl: string;
-  palette: string[];
+  colors: ExtractedColors;
   analysis: AIAnalysis | null;
   onReset: () => void;
 }
 
 function GeneratedDashboard({
-  palette,
+  colors,
   theme,
 }: {
-  palette: string[];
+  colors: ExtractedColors;
   theme: "light" | "dark";
 }) {
-  const c1 = palette[0] ?? "#8B5CF6";
-  const c2 = palette[1] ?? "#EC4899";
-  const c3 = palette[2] ?? "#06B6D4";
-  const c4 = palette[3] ?? "#F59E0B";
-  const c5 = palette[4] ?? "#10B981";
-  const c6 = palette[5] ?? "#6366F1";
+  const {
+    primary,
+    secondary,
+    accent,
+  } = colors;
 
   const bg =
     theme === "dark"
       ? "#09090B"
-      : "#FFFFFF";
+      : colors.background;
 
-  const text =
+  const textColor =
     theme === "dark"
       ? "#FFFFFF"
-      : "#000000";
+      : colors.text;
 
-  const surface =
+  const surfaceColor =
     theme === "dark"
       ? "#18181B"
-      : "#F8FAFC";
+      : colors.surface;
 
   return (
     <div
       className="overflow-hidden rounded-[32px] border border-white/10"
       style={{
         backgroundColor: bg,
-        color: text,
+        color: textColor,
       }}
     >
       <div className="flex">
@@ -60,7 +60,7 @@ function GeneratedDashboard({
 
         <aside
           className="w-64 p-6"
-          style={{ backgroundColor: c1 }}
+          style={{ backgroundColor: primary }}
         >
           <div
             className="mb-10 text-xl font-bold"
@@ -92,7 +92,7 @@ function GeneratedDashboard({
               <h3
                 className="text-3xl font-bold"
                 style={{
-                  color: text,
+                  color: textColor,
                 }}
               >
                 Dashboard
@@ -106,7 +106,7 @@ function GeneratedDashboard({
             <button
               className="rounded-xl px-4 py-2 font-medium"
               style={{
-                backgroundColor: c2,
+                backgroundColor: secondary,
                 color: "white",
               }}
             >
@@ -122,11 +122,7 @@ function GeneratedDashboard({
                 key={i}
                 className="rounded-2xl p-5"
                 style={{
-                  backgroundColor: [
-                    `${c3}20`,
-                    `${c4}20`,
-                    `${c5}20`,
-                  ][i - 1],
+                  backgroundColor: `${accent}20`,
                 }}
               >
                 <p className="text-sm text-zinc-500">
@@ -136,7 +132,7 @@ function GeneratedDashboard({
                 <h4
                   className="mt-2 text-3xl font-bold"
                   style={{
-                    color: text,
+                    color: textColor,
                   }}
                 >
                   $24.5k
@@ -150,7 +146,7 @@ function GeneratedDashboard({
           <div
             className="rounded-3xl p-6"
             style={{
-              backgroundColor: surface,
+              backgroundColor: surfaceColor,
               border: `1px solid ${theme === "dark"
                 ? "#27272A"
                 : "#E4E4E7"
@@ -168,12 +164,12 @@ function GeneratedDashboard({
                     style={{
                       height,
                       backgroundColor: [
-                        c1,
-                        c2,
-                        c3,
-                        c4,
-                        c5,
-                        c6,
+                        primary,
+                        secondary,
+                        accent,
+                        primary,
+                        secondary,
+                        accent,
                       ][i],
                     }}
                   />
@@ -188,33 +184,32 @@ function GeneratedDashboard({
 }
 
 function GeneratedLandingPage({
-  palette,
+  colors,
   theme,
 }: {
-  palette: string[];
+  colors: ExtractedColors;
   theme: "light" | "dark";
 }) {
-  const c1 = palette[0] ?? "#8B5CF6";
-  const c2 = palette[1] ?? "#EC4899";
-  const c3 = palette[2] ?? "#06B6D4";
-  const c4 = palette[3] ?? "#F59E0B";
-  const c5 = palette[4] ?? "#10B981";
-  const c6 = palette[5] ?? "#6366F1";
+  const {
+    primary,
+    secondary,
+    accent,
+  } = colors;
 
   const bg =
     theme === "dark"
       ? "#09090B"
-      : "#FFFFFF";
+      : colors.background;
 
   const text =
     theme === "dark"
       ? "#FFFFFF"
-      : "#000000";
+      : colors.text;
 
   const surface =
     theme === "dark"
       ? "#18181B"
-      : "#F8FAFC";
+      : colors.surface;
 
   const placeholder =
     theme === "dark"
@@ -265,7 +260,7 @@ function GeneratedLandingPage({
         <h1
           className="text-6xl font-black"
           style={{
-            color: c1,
+            color: primary,
           }}
         >
           Build faster with beautiful design.
@@ -285,7 +280,7 @@ function GeneratedLandingPage({
           <button
             className="rounded-2xl px-6 py-3 text-white"
             style={{
-              backgroundColor: c2,
+              backgroundColor: secondary,
             }}
           >
             Get Started
@@ -308,9 +303,9 @@ function GeneratedLandingPage({
 
       <div className="mt-16 grid grid-cols-3 gap-6">
         {[
-          { color: c4, title: "Fast Setup" },
-          { color: c5, title: "Design Tokens" },
-          { color: c6, title: "Exports" },
+          { color: primary, title: "Fast Setup" },
+          { color: secondary, title: "Design Tokens" },
+          { color: accent, title: "Exports" },
         ].map((item) => (
           <div
             key={item.title}
@@ -358,33 +353,27 @@ function GeneratedLandingPage({
 }
 
 function GeneratedMobileApp({
-  palette,
-
+  colors,
   theme,
-
 }: {
-
-  palette: string[];
-
+  colors: ExtractedColors;
   theme: "light" | "dark";
-
 }) {
-  const c1 = palette[0] ?? "#8B5CF6";
-  const c2 = palette[1] ?? "#EC4899";
-  const c3 = palette[2] ?? "#06B6D4";
-  const c4 = palette[3] ?? "#F59E0B";
-  const c5 = palette[4] ?? "#10B981";
-  const c6 = palette[5] ?? "#6366F1";
+  const {
+    primary,
+    secondary,
+    accent,
+  } = colors;
 
   const bg =
     theme === "dark"
       ? "#09090B"
-      : "#FFFFFF";
+      : colors.background;
 
   const surface =
     theme === "dark"
       ? "#18181B"
-      : "#FFFFFF";
+      : colors.surface;
 
   return (
     <div
@@ -408,7 +397,7 @@ function GeneratedMobileApp({
         <div
           className="h-40 rounded-3xl"
           style={{
-            backgroundColor: c1,
+            backgroundColor: primary,
           }}
         />
 
@@ -419,9 +408,9 @@ function GeneratedMobileApp({
               className="rounded-2xl p-4"
               style={{
                 backgroundColor: [
-                  `${c2}20`,
-                  `${c3}20`,
-                  `${c4}20`,
+                  `${secondary}20`,
+                  `${accent}20`,
+                  `${primary}20`,
                 ][i - 1],
               }}
             >
@@ -433,7 +422,7 @@ function GeneratedMobileApp({
         <button
           className="mt-6 w-full rounded-2xl py-3 text-white"
           style={{
-            backgroundColor: c5,
+            backgroundColor: secondary,
           }}
         >
           Continue
@@ -444,33 +433,27 @@ function GeneratedMobileApp({
 }
 
 function GeneratedEcommerce({
-  palette,
-
+  colors,
   theme,
-
 }: {
-
-  palette: string[];
-
+  colors: ExtractedColors;
   theme: "light" | "dark";
-
 }) {
-  const c1 = palette[0] ?? "#8B5CF6";
-  const c2 = palette[1] ?? "#EC4899";
-  const c3 = palette[2] ?? "#06B6D4";
-  const c4 = palette[3] ?? "#F59E0B";
-  const c5 = palette[4] ?? "#10B981";
-  const c6 = palette[5] ?? "#6366F1";
+  const {
+    primary,
+    secondary,
+    accent,
+  } = colors;
 
   const bg =
     theme === "dark"
       ? "#09090B"
-      : "#FFFFFF";
+      : colors.background;
 
   const surface =
     theme === "dark"
       ? "#18181B"
-      : "#FFFFFF";
+      : colors.surface;
 
   return (
     <div
@@ -479,7 +462,7 @@ function GeneratedEcommerce({
         backgroundColor: bg,
       }}
     >
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {[1, 2, 3].map((i) => (
           <div
             key={i}
@@ -496,9 +479,9 @@ function GeneratedEcommerce({
               className="h-56"
               style={{
                 backgroundColor: [
-                  c1,
-                  c2,
-                  c3,
+                  primary,
+                  secondary,
+                  accent,
                 ][i - 1],
               }}
             />
@@ -512,9 +495,9 @@ function GeneratedEcommerce({
                 className="mt-6 w-full rounded-xl py-3 text-white"
                 style={{
                   backgroundColor: [
-                    c4,
-                    c5,
-                    c6,
+                    primary,
+                    secondary,
+                    accent,
                   ][i - 1],
                 }}
               >
@@ -550,14 +533,16 @@ function AnalysisRow({
 
 function getExportCode(
   type: string,
-  palette: string[]
+  colors: ExtractedColors
 ) {
-  const c1 = palette[0] ?? "#8B5CF6";
-  const c2 = palette[1] ?? "#EC4899";
-  const c3 = palette[2] ?? "#06B6D4";
-  const c4 = palette[3] ?? "#F59E0B";
-  const c5 = palette[4] ?? "#10B981";
-  const c6 = palette[5] ?? "#6366F1";
+  const {
+    primary,
+    secondary,
+    accent,
+    background,
+    surface,
+    text,
+  } = colors;
 
   switch (type) {
     case "tailwind":
@@ -565,45 +550,38 @@ function getExportCode(
   theme: {
     extend: {
       colors: {
-  primary: "${c1}",
-  secondary: "${c2}",
-  accent: "${c3}",
-  success: "${c4}",
-  warning: "${c5}",
-  info: "${c6}",
-},
+        primary: "${primary}",
+        secondary: "${secondary}",
+        accent: "${accent}",
+        background: "${background}",
+        surface: "${surface}",
+        text: "${text}",
+      },
     },
   },
 };`;
 
     case "css":
       return `:root {
-  --color-1: ${c1};
-  --color-2: ${c2};
-  --color-3: ${c3};
-  --color-4: ${c4};
-  --color-5: ${c5};
-  --color-6: ${c6};
+  --color-primary: ${primary};
+  --color-secondary: ${secondary};
+  --color-accent: ${accent};
 
-  --font-heading: "Space Grotesk";
-  --font-body: "Inter";
+  --color-background: ${background};
+  --color-surface: ${surface};
+  --color-text: ${text};
 }`;
 
     case "json":
       return JSON.stringify(
         {
           colors: {
-            color1: c1,
-            color2: c2,
-            color3: c3,
-            color4: c4,
-            color5: c5,
-            color6: c6,
-          },
-
-          typography: {
-            heading: "Space Grotesk",
-            body: "Inter",
+            primary,
+            secondary,
+            accent,
+            background,
+            surface,
+            text,
           },
         },
         null,
@@ -614,28 +592,28 @@ function getExportCode(
       return JSON.stringify(
         {
           global: {
-            color1: {
-              value: c1,
+            primary: {
+              value: primary,
               type: "color",
             },
-            color2: {
-              value: c2,
+            secondary: {
+              value: secondary,
               type: "color",
             },
-            color3: {
-              value: c3,
+            accent: {
+              value: accent,
               type: "color",
             },
-            color4: {
-              value: c4,
+            background: {
+              value: background,
               type: "color",
             },
-            color5: {
-              value: c5,
+            surface: {
+              value: surface,
               type: "color",
             },
-            color6: {
-              value: c6,
+            text: {
+              value: text,
               type: "color",
             },
           },
@@ -651,7 +629,7 @@ function getExportCode(
 
 export function ProjectResults({
   imageUrl,
-  palette,
+  colors,
   analysis,
   onReset,
 }: ProjectResultsProps) {
@@ -665,7 +643,7 @@ export function ProjectResults({
 
   const exportCode = getExportCode(
     exportType,
-    palette,
+    colors,
   );
 
   const [theme, setTheme] =
@@ -673,12 +651,43 @@ export function ProjectResults({
       "light"
     );
 
-  const exportLanguage = {
-    tailwind: "typescript",
-    css: "css",
-    json: "json",
-    figma: "json",
-  }[exportType];
+  const colorRoles = [
+    {
+      label: "Primary",
+      value: colors.primary,
+    },
+    {
+      label: "Secondary",
+      value: colors.secondary,
+    },
+    {
+      label: "Accent",
+      value: colors.accent,
+    },
+    {
+      label: "Background",
+      value: colors.background,
+    },
+    {
+      label: "Surface",
+      value: colors.surface,
+    },
+    {
+      label: "Text",
+      value: colors.text,
+    },
+  ];
+
+  const [copiedColor, setCopiedColor] =
+    useState<string | null>(null);
+
+  const exportLanguage =
+    {
+      tailwind: "typescript",
+      css: "css",
+      json: "json",
+      figma: "json",
+    }[exportType] ?? "json";
 
   const [copied, setCopied] = useState(false);
 
@@ -740,33 +749,83 @@ export function ProjectResults({
 
       <section className="mb-32">
         <h2 className="mb-8 text-4xl font-bold">
-          Extracted Palette
+          Extracted Design System
         </h2>
 
-        {palette.length > 0 ? (
-          <div className="grid grid-cols-6 gap-4">
-            {palette.map((color) => (
-              <div key={color}>
-                <div
-                  className="h-32 rounded-3xl"
-                  style={{
-                    backgroundColor: color,
-                  }}
-                />
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {colorRoles.map((item) => (
+            <button
+              key={item.label}
+              onClick={async () => {
+                await navigator.clipboard.writeText(
+                  item.value
+                );
 
-                <p className="mt-3 font-mono text-sm">
-                  {color}
-                </p>
+                setCopiedColor(item.value);
+
+                setTimeout(() => {
+                  setCopiedColor(null);
+                }, 2000);
+              }}
+              className="
+        group
+        text-left
+        transition-all
+        duration-300
+        hover:scale-[1.02]
+      "
+            >
+              <p className="mb-3 text-sm text-zinc-500">
+                {item.label}
+              </p>
+
+              <div
+                className="
+          relative
+          h-32
+          overflow-hidden
+          rounded-3xl
+          border
+          border-white/10
+        "
+                style={{
+                  backgroundColor: item.value,
+                }}
+              >
+                <div
+                  className="
+            absolute
+            inset-0
+            flex
+            items-center
+            justify-center
+            bg-black/40
+            opacity-0
+            transition-opacity
+            duration-300
+            group-hover:opacity-100
+          "
+                >
+                  <span className="font-medium text-white">
+                    Click to Copy
+                  </span>
+                </div>
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
-            <p className="text-lg text-zinc-400">
-              None found
-            </p>
-          </div>
-        )}
+
+              <div className="mt-3 flex items-center justify-between">
+                <p className="font-mono text-sm">
+                  {item.value}
+                </p>
+
+                {copiedColor === item.value && (
+                  <span className="text-sm text-emerald-400">
+                    ✓ Copied
+                  </span>
+                )}
+              </div>
+            </button>
+          ))}
+        </div>
       </section>
 
       {analysis && (
@@ -1023,7 +1082,7 @@ export function ProjectResults({
             </div>
 
             {/* Preview Selector */}
-            <div className="flex gap-2 rounded-2xl border border-white/10 bg-white/5 p-2">
+            <div className="flex flex-wrap gap-2 rounded-2xl border border-white/10 bg-white/5 p-2">
               {[
                 ["dashboard", "Dashboard"],
                 ["landing", "Landing Page"],
@@ -1048,28 +1107,22 @@ export function ProjectResults({
 
         {preview === "dashboard" && (
           <GeneratedDashboard
-
-            palette={palette}
-
+            colors={colors}
             theme={theme}
-
           />
         )}
 
         {preview === "landing" && (
           <GeneratedLandingPage
-
-            palette={palette}
-
+            colors={colors}
             theme={theme}
-
           />
         )}
 
         {preview === "mobile" && (
           <GeneratedMobileApp
 
-            palette={palette}
+            colors={colors}
 
             theme={theme}
 
@@ -1077,9 +1130,11 @@ export function ProjectResults({
         )}
 
         {preview === "ecommerce" && (
+
+
           <GeneratedEcommerce
 
-            palette={palette}
+            colors={colors}
 
             theme={theme}
 

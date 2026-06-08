@@ -725,21 +725,48 @@ export function UploadZone({
                       }, 5000);
 
                       const response = await fetch(
-                        "/api/screenshot",
-                        {
-                          method: "POST",
-                          headers: {
-                            "Content-Type":
-                              "application/json",
-                          },
-                          body: JSON.stringify({
-                            url,
-                          }),
-                        }
-                      );
+  "/api/screenshot",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type":
+        "application/json",
+    },
+    body: JSON.stringify({
+      url,
+    }),
+  }
+);
 
-                      const blob =
-                        await response.blob();
+if (!response.ok) {
+  const text =
+    await response.text();
+
+  console.error(
+    "Screenshot API failed:",
+    text
+  );
+
+  throw new Error(text);
+}
+
+const contentType =
+  response.headers.get(
+    "content-type"
+  );
+
+if (
+  !contentType?.startsWith(
+    "image/"
+  )
+) {
+  throw new Error(
+    "Screenshot endpoint did not return an image"
+  );
+}
+
+const blob =
+  await response.blob();
 
                       const file = new File(
                         [blob],

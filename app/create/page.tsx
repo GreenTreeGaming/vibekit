@@ -7,6 +7,7 @@ import { UploadZone } from "@/components/upload-zone";
 import { UploadPreview } from "@/components/upload-preview";
 import { AnalysisLoader } from "@/components/analysis-loader";
 import { ProjectResults } from "@/components/project-results";
+import type { ExtractedColors } from "@/types/colors";
 
 import type { AIAnalysis } from "@/types/ai";
 
@@ -45,8 +46,10 @@ export default function CreatePage() {
   const [imageFile, setImageFile] =
     useState<File | null>(null);
 
-  const [palette, setPalette] =
-    useState<string[]>([]);
+  const [colors, setColors] =
+    useState<ExtractedColors | null>(
+      null
+    );
 
   const [useAI, setUseAI] =
     useState(true);
@@ -190,8 +193,8 @@ export default function CreatePage() {
               const paletteData =
                 await paletteRes.json();
 
-              setPalette(
-                paletteData.colors
+              setColors(
+                paletteData.semantic
               );
 
               // AI Analysis
@@ -255,15 +258,16 @@ export default function CreatePage() {
       )}
 
       {stage === "generated" &&
-        imageUrl && (
+        imageUrl &&
+        colors && (
           <ProjectResults
             imageUrl={imageUrl}
-            palette={palette}
+            colors={colors}
             analysis={analysis}
             onReset={() => {
               setImageFile(null);
               setImageUrl(null);
-              setPalette([]);
+              setColors(null);
               setAnalysis(null);
 
               generationStarted.current = false;

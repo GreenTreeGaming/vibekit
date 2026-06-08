@@ -1,94 +1,144 @@
 import { NextResponse } from "next/server";
-import { chromium } from "playwright";
+
+export const runtime = "nodejs";
 
 export async function POST(
   req: Request
 ) {
-  const { url } = await req.json();
-
-  if (
-    !url ||
-    typeof url !== "string" ||
-    !url.startsWith("http")
-  ) {
-    return NextResponse.json(
-      {
-        error: "Invalid URL",
-      },
-      {
-        status: 400,
-      }
-    );
-  }
-
-  const browser = await chromium.launch({
-    headless: true,
-  });
+  let browser: any;
 
   try {
-    const page = await browser.newPage({
-      viewport: {
-        width: 1728,
-        height: 1117,
-      },
-    });
+    const { url } =
+      await req.json();
+
+    if (
+      !url ||
+      typeof url !== "string" ||
+      !url.startsWith("http")
+    ) {
+      return NextResponse.json(
+        {
+          error: "Invalid URL",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const isDev =
+      process.env.NODE_ENV ===
+      "development";
+
+    if (isDev) {
+      const {
+        chromium,
+      } = await import(
+        "playwright"
+      );
+
+      browser =
+        await chromium.launch({
+          headless: true,
+        });
+    } else {
+      const chromium =
+        (
+          await import(
+            "@sparticuz/chromium"
+          )
+        ).default;
+
+      const {
+        chromium: playwright,
+      } = await import(
+        "playwright-core"
+      );
+
+      browser =
+        await playwright.launch({
+          args: chromium.args,
+
+          executablePath:
+            await chromium.executablePath(),
+
+          headless: true,
+        });
+    }
+
+    const page =
+      await browser.newPage({
+        viewport: {
+          width: 1728,
+          height: 1117,
+        },
+      });
 
     await page.goto(url, {
       waitUntil: "networkidle",
       timeout: 30000,
     });
 
-    // Wait for fonts
-
-    await page.evaluate(async () => {
-      // @ts-ignore
-      if (document.fonts) {
+    await page.evaluate(
+      async () => {
         // @ts-ignore
-        await document.fonts.ready;
+        if (document.fonts) {
+          // @ts-ignore
+          await document.fonts.ready;
+        }
       }
-    });
+    );
 
-    // Let page settle
+    await page.waitForTimeout(
+      2000
+    );
 
-    await page.waitForTimeout(2000);
+    await page.evaluate(
+      async () => {
+        await new Promise<void>(
+          (resolve) => {
+            let totalHeight = 0;
 
-    // Trigger scroll animations
-    // GSAP, Framer Motion, AOS, etc.
+            const distance = 500;
 
-    await page.evaluate(async () => {
-      await new Promise<void>((resolve) => {
-        let totalHeight = 0;
+            const timer =
+              setInterval(() => {
+                window.scrollBy(
+                  0,
+                  distance
+                );
 
-        const distance = 500;
+                totalHeight +=
+                  distance;
 
-        const timer = setInterval(() => {
-          window.scrollBy(0, distance);
+                if (
+                  totalHeight >=
+                  document.body
+                    .scrollHeight
+                ) {
+                  clearInterval(
+                    timer
+                  );
 
-          totalHeight += distance;
-
-          if (
-            totalHeight >=
-            document.body.scrollHeight
-          ) {
-            clearInterval(timer);
-            resolve();
+                  resolve();
+                }
+              }, 250);
           }
-        }, 250);
-      });
-    });
-
-    // Scroll back to top
+        );
+      }
+    );
 
     await page.evaluate(() => {
       window.scrollTo({
         top: 0,
-        behavior: "instant" as ScrollBehavior,
+        behavior:
+          "instant" as ScrollBehavior,
       });
     });
 
-    await page.waitForTimeout(1000);
-
-    // Freeze animations before capture
+    await page.waitForTimeout(
+      1000
+    );
 
     await page.addStyleTag({
       content: `
@@ -102,39 +152,51 @@ export async function POST(
       `,
     });
 
-    // Small delay after freezing
-
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(
+      300
+    );
 
     const screenshot =
       await page.screenshot({
         fullPage: true,
         type: "png",
-        animations: "disabled",
+        animations:
+          "disabled",
       });
 
     return new NextResponse(
-      new Uint8Array(screenshot),
+      new Uint8Array(
+        screenshot
+      ),
       {
         headers: {
-          "Content-Type": "image/png",
-          "Cache-Control": "no-store",
+          "Content-Type":
+            "image/png",
+          "Cache-Control":
+            "no-store",
         },
       }
     );
   } catch (error) {
-    console.error(error);
+    console.error(
+      "SCREENSHOT ERROR:",
+      error
+    );
 
     return NextResponse.json(
       {
         error:
-          "Failed to capture website screenshot",
+          error instanceof Error
+            ? error.message
+            : String(error),
       },
       {
         status: 500,
       }
     );
   } finally {
-    await browser.close();
+    if (browser) {
+      await browser.close();
+    }
   }
 }
