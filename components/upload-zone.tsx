@@ -579,7 +579,7 @@ export function UploadZone({
                 Paste Image
               </button>
 
-              <button
+              {/* <button
                 onClick={() => {
                   setShowUrlInput(true);
 
@@ -607,7 +607,7 @@ export function UploadZone({
                 <Link2 className="h-5 w-5" />
 
                 Analyze Website
-              </button>
+              </button> */}
             </div>
 
 

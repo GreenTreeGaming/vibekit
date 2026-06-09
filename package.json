@@ -11,7 +11,7 @@
   "dependencies": {
     "@google/genai": "^2.8.0",
     "@huggingface/inference": "^4.13.18",
-    "@sparticuz/chromium": "^149.0.0",
+    "@sparticuz/chromium": "^138.0.2",
     "@types/react-syntax-highlighter": "^15.5.13",
     "@uploadthing/react": "^7.3.3",
     "@upstash/ratelimit": "^2.0.8",
